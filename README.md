@@ -1,62 +1,3 @@
-## Étapes pour pousser ton code sur GitHub
-
-1. **Créer un dépôt sur GitHub**
-
-   - Connecte-toi sur [GitHub](https://github.com) avec ton compte **seliegarrigues**.
-   - Clique sur le bouton **"New Repository"** (Nouveau dépôt).
-   - Remplis le formulaire :
-     - **Repository name** : par exemple, `movie-reviews`
-     - **Description** (facultatif) : une courte description de ton projet
-     - **Public** : coche cette option pour rendre le dépôt public
-     - **Initialize this repository with a README** : **ne coche pas** cette case (puisque tu vas pousser ton propre README.md).
-   - Clique sur **"Create repository"**.
-
-2. **Initialiser Git et préparer ton dépôt local**  
-   (Si tu ne l'as pas déjà fait)
-
-   - Ouvre un terminal à la racine de ton projet (`movie-reviews`).
-   - Initialiser le dépôt Git (si ce n'est pas déjà fait) :
-     ```bash
-     git init
-     ```
-   - Assure-toi que ton fichier `.gitignore` se trouve bien à la racine et qu'il contient au moins :
-     ```gitignore
-     .env
-     node_modules/
-     ```
-
-3. **Ajouter et committer tes fichiers**
-
-   - Ajoute tous les fichiers (sauf ceux ignorés par `.gitignore`) :
-     ```bash
-     git add .
-     ```
-   - Réalise un commit :
-     ```bash
-     git commit -m "Initial commit"
-     ```
-
-4. **Relier ton dépôt local au dépôt GitHub et pousser le code**
-   - Assure-toi d'être sur la branche principale (ici `main`) :
-     ```bash
-     git branch -M main
-     ```
-   - Ajoute le dépôt distant (remote) :
-     ```bash
-     git remote add origin https://github.com/seliegarrigues/movie-reviews.git
-     ```
-   - Pousse ton code sur GitHub :
-     ```bash
-     git push -u origin main
-     ```
-
----
-
-## Exemple de contenu pour le fichier README.md
-
-Crée un fichier nommé `README.md` à la racine de ton projet et copie-y le contenu suivant (tu peux l'adapter en fonction de ton projet) :
-
-````markdown
 # Movie Reviews
 
 Movie Reviews est une API backend développée en Node.js avec Express et MongoDB, permettant de gérer des films et leurs critiques.
@@ -75,6 +16,7 @@ Ce projet permet de :
    ```bash
    git clone https://github.com/seliegarrigues/movie-reviews.git
    ```
+
 ````
 
 2. **Se positionner dans le dossier du projet :**
@@ -90,8 +32,8 @@ Ce projet permet de :
 
 ## Configuration de l'environnement
 
-1. **Créer un fichier `.env`**  
-   Le projet utilise un fichier `.env` pour stocker les variables d'environnement sensibles.  
+1. **Créer un fichier `.env`**
+   Le projet utilise un fichier `.env` pour stocker les variables d'environnement sensibles.
    Pour démarrer, copie le fichier d'exemple et renseigne tes propres valeurs :
    ```bash
    cp .env.example .env
@@ -109,7 +51,7 @@ Pour démarrer le serveur, lance la commande :
 npm start
 ```
 
-Le serveur se lancera sur le port défini dans le fichier `.env` (par défaut, [http://localhost:5000](http://localhost:5000)).  
+Le serveur se lancera sur le port défini dans le fichier `.env` (par défaut, [http://localhost:5000](http://localhost:5000)).
 Tu peux ensuite tester les endpoints de l'API avec Postman ou tout autre client HTTP.
 
 ## Endpoints de l'API
@@ -123,7 +65,7 @@ Tu peux ensuite tester les endpoints de l'API avec Postman ou tout autre client 
 
 ## Contribuer
 
-Les contributions sont les bienvenues !  
+Les contributions sont les bienvenues !
 Si tu souhaites proposer des améliorations ou corriger des bugs, n'hésite pas à ouvrir une issue ou à soumettre une pull request.
 
 ## Licence
@@ -138,3 +80,4 @@ En suivant ces étapes, ton code sera correctement envoyé sur GitHub et ton dé
 
 Si tu as d'autres questions ou besoin de précisions supplémentaires, n'hésite pas !
 ```
+````
