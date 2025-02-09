@@ -1,7 +1,3 @@
-Voici les étapes pour envoyer ton code sur GitHub ainsi qu'un exemple de contenu pour ton fichier README.md.
-
----
-
 ## Étapes pour pousser ton code sur GitHub
 
 1. **Créer un dépôt sur GitHub**
