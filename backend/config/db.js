@@ -1,6 +1,8 @@
 // config/db.js
 import { MongoClient } from "mongodb";
 
+console.log(" DB_URI:", process.env.DB_URI);
+
 const client = new MongoClient(process.env.DB_URI);
 let db;
 
