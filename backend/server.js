@@ -1,17 +1,26 @@
-//server.js
-
+// backend/server.js
 import express from "express";
 import cors from "cors";
-import movies from "./api/movies.route.js";
+import dotenv from "dotenv";
+import { connectDB } from "./config/db.js";
+import moviesRoutes from "./routes/movies.routes.js";
+import errorHandler from "./middleware/errorHandler.js";
+
+dotenv.config();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/v1/movies", movies);
+connectDB();
+
+app.use("/api/v1/movies", moviesRoutes);
+
 app.use("*", (req, res) => {
-  res.status(404).json({ error: "non trouvé" });
+  res.status(404).json({ error: "Route non trouvée" });
 });
+
+app.use(errorHandler);
 
 export default app;
