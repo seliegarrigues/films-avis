@@ -44,11 +44,21 @@ export default class MoviesService {
 
   static async getMovieById(id) {
     try {
+      console.log("ID reçu dans le service :", "type:", typeof id, id);
       const db = getDB();
-      return await db
+
+      if (!ObjectId.isValid(id)) {
+        console.error("ID invalide :", id);
+        return null;
+      }
+
+      const objectId = new ObjectId(id);
+      console.log("ObjectId converti :", objectId);
+
+      const movie = await db
         .collection("movies")
         .aggregate([
-          { $match: { _id: new ObjectId(id) } },
+          { $match: { _id: objectId } },
           {
             $lookup: {
               from: "reviews",
@@ -59,6 +69,14 @@ export default class MoviesService {
           },
         ])
         .next();
+
+      if (!movie) {
+        console.log("Aucun film trouvé avec cet ID dans MongoDB.");
+      } else {
+        console.log("Film trouvé :", movie);
+      }
+
+      return movie;
     } catch (error) {
       console.error("Erreur lors de la récupération du film par ID :", error);
       return null;

@@ -4,6 +4,7 @@ import ReviewsService from "../services/reviews.service.js";
 
 export default class ReviewsController {
   static async createReview(req, res) {
+    console.log("🔍 Données reçues :", req.body);
     try {
       const { movie_id, review, name, user_id } = req.body;
 

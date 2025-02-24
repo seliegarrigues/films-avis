@@ -8,6 +8,8 @@ export default class ReviewsService {
   static async addReview(movieId, user, review, date) {
     try {
       const db = getDB();
+      console.log(" Connexion à la base MongoDB réussie !");
+      console.log(" Données envoyées :", { movieId, user, review, date });
       const reviewDoc = {
         movie_id: new ObjectId(movieId),
         user: user,

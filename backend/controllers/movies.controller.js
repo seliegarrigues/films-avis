@@ -37,6 +37,16 @@ export default class MoviesController {
   static async getMovieById(req, res) {
     try {
       const { id } = req.params;
+      console.log(
+        "ID reçu dans le controller:",
+        req.params.id,
+        "type:",
+        typeof req.params.id,
+        id,
+        "Type",
+        typeof id
+      );
+
       const movie = await MoviesService.getMovieById(id);
 
       if (!movie) {
