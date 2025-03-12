@@ -1,41 +1,22 @@
 // services/movies.service.js
-import { ObjectId } from "mongodb";
-import { getDB } from "../config/db.js";
-
-export default class MoviesService {
-  static async getMovies({ filters = {}, page = 0, moviesPerPage = 20 } = {}) {
+import mongoose from "mongoose";
+import Movie from "../models/Movie.js";
+class MoviesService {
+  static async getMovies() {
     try {
-      const db = getDB();
-      const query = {};
-
-      if (filters.title) {
-        query.$text = { $search: filters.title };
-      } else if (filters.rated) {
-        query.rated = filters.rated;
-      }
-
-      const movies = await db
-        .collection("movies")
-        .find(query)
-        .skip(moviesPerPage * page)
-        .limit(moviesPerPage)
-        .toArray();
-
-      const totalNumMovies = await db
-        .collection("movies")
-        .countDocuments(query);
-
-      return { movies, totalNumMovies };
+      const movies = await Movie.find({}).limit(10);
+      console.log(movies);
+      return movies;
     } catch (error) {
       console.error("Erreur lors de la récupération des films :", error);
-      return { movies: [], totalNumMovies: 0 };
+      throw error;
     }
   }
 
   static async getRatings() {
     try {
-      const db = getDB();
-      return await db.collection("movies").distinct("rated");
+      const ratings = await Movie.distinct("rated");
+      return ratings;
     } catch (error) {
       console.error("Erreur lors de la récupération des notes :", error);
       return [];
@@ -45,30 +26,14 @@ export default class MoviesService {
   static async getMovieById(id) {
     try {
       console.log("ID reçu dans le service :", "type:", typeof id, id);
-      const db = getDB();
 
-      if (!ObjectId.isValid(id)) {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
         console.error("ID invalide :", id);
         return null;
       }
 
-      const objectId = new ObjectId(id);
-      console.log("ObjectId converti :", objectId);
-
-      const movie = await db
-        .collection("movies")
-        .aggregate([
-          { $match: { _id: objectId } },
-          {
-            $lookup: {
-              from: "reviews",
-              localField: "_id",
-              foreignField: "movie_id",
-              as: "reviews",
-            },
-          },
-        ])
-        .next();
+      const movie = await Movie.findById(id);
+      console.log(movie);
 
       if (!movie) {
         console.log("Aucun film trouvé avec cet ID dans MongoDB.");
@@ -83,3 +48,4 @@ export default class MoviesService {
     }
   }
 }
+export default MoviesService;

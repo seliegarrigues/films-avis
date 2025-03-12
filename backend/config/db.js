@@ -1,25 +1,19 @@
 // config/db.js
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
+import Movie from "../models/Movie.js";
 
-console.log(" DB_URI:", process.env.DB_URI);
-
-const client = new MongoClient(process.env.DB_URI);
-let db;
-
-export async function connectDB() {
+const connectDB = async () => {
   try {
-    await client.connect();
-    db = client.db(process.env.DB_NAME);
-    console.log(" Connexion à MongoDB réussie !");
+    const conn = await mongoose.connect(
+      process.env.DB_URI + process.env.DB_NAME
+    );
+    const count = await Movie.countDocuments();
+    console.log(count);
+    console.log(`projet connecté à Mongoose: ${conn.connection.host}`);
   } catch (error) {
-    console.error(" Erreur de connexion à MongoDB :", error);
-    throw error;
+    console.error(`Erreur de connexion à MongoDB: ${error.message}`);
+    process.exit(1);
   }
-}
+};
 
-export function getDB() {
-  if (!db) {
-    throw new Error(" La base de données n'est pas connectée !");
-  }
-  return db;
-}
+export default connectDB;

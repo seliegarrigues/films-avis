@@ -1,30 +1,11 @@
 // controllers/movies.controller.js
 
 import MoviesService from "../services/movies.service.js";
-
-export default class MoviesController {
+class MoviesController {
   static async getMovies(req, res) {
     try {
-      const moviesPerPage = parseInt(req.query.moviesPerPage) || 20;
-      const page = parseInt(req.query.page) || 0;
-
-      const filters = {};
-      if (req.query.rated) filters.rated = req.query.rated;
-      if (req.query.title) filters.title = req.query.title;
-
-      const { movies, totalNumMovies } = await MoviesService.getMovies({
-        filters,
-        page,
-        moviesPerPage,
-      });
-
-      res.status(200).json({
-        movies,
-        page,
-        filters,
-        entries_per_page: moviesPerPage,
-        total_results: totalNumMovies,
-      });
+      const movies = await MoviesService.getMovies();
+      res.status(200).json(movies);
     } catch (error) {
       console.error("Erreur dans getMovies :", error);
       res.status(500).json({
@@ -37,15 +18,7 @@ export default class MoviesController {
   static async getMovieById(req, res) {
     try {
       const { id } = req.params;
-      console.log(
-        "ID reçu dans le controller:",
-        req.params.id,
-        "type:",
-        typeof req.params.id,
-        id,
-        "Type",
-        typeof id
-      );
+      console.log("ID reçu dans le controller:", id, "Type", typeof id);
 
       const movie = await MoviesService.getMovieById(id);
 
@@ -76,3 +49,4 @@ export default class MoviesController {
     }
   }
 }
+export default MoviesController;

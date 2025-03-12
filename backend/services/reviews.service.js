@@ -1,23 +1,29 @@
 // services/reviews.service.js
 
-import { ObjectId } from "bson";
-import { getDB } from "../config/db.js";
+import Review from "../models/Review.js";
 
 export default class ReviewsService {
-  // Ajouter un avis
-  static async addReview(movieId, user, review, date) {
+  static async addReview(movie_id, user, comment, date) {
     try {
-      const db = getDB();
-      console.log(" Connexion à la base MongoDB réussie !");
-      console.log(" Données envoyées :", { movieId, user, review, date });
-      const reviewDoc = {
-        movie_id: new ObjectId(movieId),
-        user: user,
-        review: review,
-        date: date,
-      };
+      console.log(" Données envoyées :", { movie_id, user, comment, date });
+      console.log(" Vérification avant création de l'avis :", {
+        movie_id,
+        user,
+        comment,
+        date,
+      });
 
-      const result = await db.collection("reviews").insertOne(reviewDoc);
+      const newReview = new Review({
+        movie_id: movie_id,
+        user: {
+          _id: user?._id || "ID MANQUAN?", //  Assure que user contient un ID et un nom
+          name: user?.name || "NOM MANQUANT",
+        },
+        comment: comment,
+        date: date,
+      });
+
+      const result = await newReview.save();
       return result;
     } catch (error) {
       console.error(" Erreur lors de l'ajout de l'avis :", error);
@@ -25,18 +31,24 @@ export default class ReviewsService {
     }
   }
 
-  // Modifier un avis
-  static async updateReview(reviewId, userId, review, date) {
+  static async updateReview(reviewId, comment, date) {
     try {
-      const db = getDB();
-      const updateResult = await db
-        .collection("reviews")
-        .updateOne(
-          { _id: new ObjectId(reviewId), "user._id": userId },
-          { $set: { review: review, date: date } }
-        );
-
-      if (updateResult.matchedCount === 0) {
+      /*
+      const updateResult = await Review.findOneAndUpdate(
+        { _id: reviewId, "user._id": userId },
+        { comment: comment, date: date },
+        { new: true }
+      );
+      */
+      const updateResult = await Review.findByIdAndUpdate(
+        reviewId,
+        {
+          comment: comment,
+          updatedAt: date,
+        },
+        { new: true }
+      );
+      if (!updateResult) {
         return { error: "Aucun avis trouvé ou non autorisé." };
       }
 
@@ -47,15 +59,15 @@ export default class ReviewsService {
     }
   }
 
-  // Supprimer un avis
-  static async deleteReview(reviewId, userId) {
+  static async deleteReview(reviewId) {
     try {
-      const db = getDB();
-      const deleteResult = await db.collection("reviews").deleteOne({
-        _id: new ObjectId(reviewId),
+      /*
+      const deleteResult = await Review.deleteOne({
+        _id: reviewId,
         "user._id": userId,
       });
-
+      */
+      const deleteResult = await Review.findByIdAndDelete(reviewId);
       return deleteResult;
     } catch (error) {
       console.error(" Erreur lors de la suppression de l'avis :", error);
